@@ -16,7 +16,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
 import Typography from '@mui/material/Typography'
 
-
+//ayush sojitra
 export default function View({
   data,
   onEdit,
