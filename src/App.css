@@ -1,0 +1,19 @@
+.react-datepicker__input-container,.react-datepicker-wrapper{
+  width: 0px !important;
+  /* position: relative; */
+  /* z-index: -1; */
+}
+#btn{
+  float: right;
+}
+.txt{
+  width: 100%;
+}
+#md{
+  z-index: 1;
+}
+#DP{
+  margin-top: 42px !important;
+  margin-left: 10px !important;
+  width: auto !important;
+}
