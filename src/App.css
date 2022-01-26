@@ -1,19 +1,38 @@
-.react-datepicker__input-container,.react-datepicker-wrapper{
-  width: 0px !important;
-  /* position: relative; */
-  /* z-index: -1; */
+.App {
+  text-align: center;
 }
-#btn{
-  float: right;
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
-.txt{
-  width: 100%;
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
-#md{
-  z-index: 1;
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
-#DP{
-  margin-top: 42px !important;
-  margin-left: 10px !important;
-  width: auto !important;
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
