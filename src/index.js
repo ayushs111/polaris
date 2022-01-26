@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AppProvider } from "@shopify/polaris";
+import en from '@shopify/polaris/locales/en.json';
 
 ReactDOM.render(
-  <React.StrictMode>
+
+  <AppProvider i18n={en} theme={{ colorScheme: "light" }} >
     <App />
-  </React.StrictMode>,
+  </AppProvider>,
   document.getElementById('root')
 );
 
