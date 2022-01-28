@@ -1,176 +1,110 @@
-import React, { useCallback, useState } from 'react';
-import { Avatar, Button, Card, Filters, ResourceItem, ResourceList, TextField, TextStyle } from '@shopify/polaris';
+import React, {useCallback, useState,useEffect} from 'react';
+// import {Button} from '@shopify/polaris';
+import View from './View';
+import Model from './modalcom'
 
-export default function ResourceListExample() {
-  console.log("ayush")
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [sortValue, setSortValue] = useState('DATE_MODIFIED_DESC');
-  const [taggedWith, setTaggedWith] = useState('VIP');
-  const [queryValue, setQueryValue] = useState(null);
 
-  const handleTaggedWithChange = useCallback(
-    (value) => setTaggedWith(value),
-    [],
-  );
-  const handleQueryValueChange = useCallback(
-    (value) => setQueryValue(value),
-    [],
-  );
-  const handleTaggedWithRemove = useCallback(() => setTaggedWith(null), []);
-  const handleQueryValueRemove = useCallback(() => setQueryValue(null), []);
-  const handleClearAll = useCallback(() => {
-    handleTaggedWithRemove();
-    handleQueryValueRemove();
-  }, [handleQueryValueRemove, handleTaggedWithRemove]);
+export default function Main() {
 
-  const resourceName = {
-    singular: 'customer',
-    plural: 'customers',
-  };
-
-  const items = [
-    {
-      id: 112,
-      url: 'customers/341',
-      name: 'Mae Jemison',
-      location: 'Decatur, USA',
-      latestOrderUrl: 'orders/1456',
-    },
-    {
-      id: 212,
-      url: 'customers/256',
-      name: 'Ellen Ochoa',
-      location: 'Los Angeles, USA',
-      latestOrderUrl: 'orders/1457',
-    },
-  ];
-
-  const promotedBulkActions = [
-    {
-      content: 'Edit customers',
-      onAction: () => console.log('Todo: implement bulk edit'),
-    },
-  ];
-
-  const bulkActions = [
-    {
-      content: 'Add tags',
-      onAction: () => console.log('Todo: implement bulk add tags'),
-    },
-    {
-      content: 'Remove tags',
-      onAction: () => console.log('Todo: implement bulk remove tags'),
-    },
-    {
-      content: 'Delete customers',
-      onAction: () => console.log('Todo: implement bulk delete'),
-    },
-  ];
-
-  const filters = [
-    {
-      key: 'taggedWith3',
-      label: 'Tagged with',
-      filter: (
-        <TextField
-          label="Tagged with"
-          value={taggedWith}
-          onChange={handleTaggedWithChange}
-          autoComplete="off"
-          labelHidden
-        />
-      ),
-      shortcut: true,
-    },
-  ];
-
-  const appliedFilters = !isEmpty(taggedWith)
-    ? [
-        {
-          key: 'taggedWith3',
-          label: disambiguateLabel('taggedWith3', taggedWith),
-          onRemove: handleTaggedWithRemove,
-        },
-      ]
-    : [];
-
-  const filterControl = (
-    <Filters
-      queryValue={queryValue}
-      filters={filters}
-      appliedFilters={appliedFilters}
-      onQueryChange={handleQueryValueChange}
-      onQueryClear={handleQueryValueRemove}
-      onClearAll={handleClearAll}
-    >
-      <div style={{paddingLeft: '8px'}}>
-        <Button onClick={() => console.log('New filter saved')}>Save</Button>
-      </div>
-    </Filters>
-  );
-
-  return (
-    <Card>
-      
-      <ResourceList
-        resourceName={resourceName}
-        items={items}
-        renderItem={renderItem}
-        selectedItems={selectedItems}
-        onSelectionChange={setSelectedItems}
-        promotedBulkActions={promotedBulkActions}
-        bulkActions={bulkActions}
-        sortValue={sortValue}
-        sortOptions={[
-          {label: 'Newest update', value: 'DATE_MODIFIED_DESC'},
-          {label: 'Oldest update', value: 'DATE_MODIFIED_ASC'},
-        ]}
-        onSortChange={(selected) => {
-          setSortValue(selected);
-          console.log(`Sort option changed to ${selected}.`);
-        }}
-        filterControl={filterControl}
-      />
-    </Card>
-  );
-
-  function renderItem(item) {
-    const {id, url, name, location, latestOrderUrl} = item;
-    const media = <Avatar customer size="medium" name={name} />;
-    const shortcutActions = latestOrderUrl
-      ? [{content: 'View latest order', url: latestOrderUrl}]
-      : null;
-    return (
-      <ResourceItem
-        id={id}
-        url={url}
-        media={media}
-        accessibilityLabel={`View details for ${name}`}
-        shortcutActions={shortcutActions}
-        persistActions
-      >
-        <h3>
-          <TextStyle variation="strong">{name}</TextStyle>
-        </h3>
-        <div>{location}</div>
-      </ResourceItem>
-    );
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchDate, setSearchDate] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+  // const [startDate, setStartDate] = React.useState(new Date())
+  const [active, setActive] = useState(false);
+  const [filter, setFilter] = useState('')
+  const [openEdit, setOpenEdit] = useState(false)
+  const [obj, setObj] = useState([])
+  const [edit, setEdit] = useState('')
+  const [delet, setDelet] = useState([])
+  const [blank, setBlank] = useState({
+    name: '',
+    email: '',
+    date: new Date(),
+    pass: '',
+  })
+  
+  if (filter === '') {
+  } else if (filter === 'descending') {
+    obj.sort((a, b) => (b.date > a.date ? 1 : -1))
+  } else if (filter === 'ascending') {
+     obj.sort((a, b) => (b.date < a.date ? 1 : -1))
   }
-
-  function disambiguateLabel(key, value) {
-    switch (key) {
-      case 'taggedWith3':
-        return `Tagged with ${value}`;
-      default:
-        return value;
+  // console.log(delet);
+  useEffect(() => {
+    console.log(delet)
+    let newArry = [...obj]
+    delet.map( (deletI) => {
+      // setObj(obj.filter( (user) => user.id !== deletI))
+      newArry = newArry.filter((user) => user.id !== deletI)
+    })
+    setObj(newArry)
+    // setDelet([]);
+  },[delet])
+  useEffect(() => {
+    if (openEdit === true) {
+      setBlank({
+        name: obj[edit].name,
+        email: obj[edit].email,
+        pass: obj[edit].password,
+        date: new Date(obj[edit].date),
+      })
     }
-  }
+  }, [edit])
 
-  function isEmpty(value) {
-    if (Array.isArray(value)) {
-      return value.length === 0;
+  const searchHandler = (searchTerm) => {
+    setSearchTerm(searchTerm)
+    if (searchTerm !== '') {
+      const setObj = obj.filter((user) => {
+        return Object.values(user.email)
+          .join('')
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      })
+      setSearchResults(setObj)
     } else {
-      return value === '' || value == null;
+      setSearchResults(obj)
     }
   }
+  const DatesearchHandler = (searchDate) => {
+    setSearchDate("'"+searchDate+"'")
+    if (searchDate !== '') {
+      const setObj = obj.filter((user) => {
+        return Object.values(user.date)
+        .join('')
+        .includes(searchDate)
+      })
+      setSearchResults(setObj)
+      console.log(searchResults)
+    } else {
+      setSearchResults(obj)
+    }
+    console.log(searchDate)
+  }
+  
+    const handleChange = useCallback(() => setActive(!active),[active]);
+  return <div>
+    <View 
+    data={searchDate.length < 1 && searchTerm.length < 1 ? obj : searchResults}
+    onEdit={setEdit}
+    onDelet={setDelet}
+    term={searchTerm}
+    // open={setOpen}
+    openEdit={setOpenEdit}
+    filter={setFilter}
+    f={filter}
+    handleChange={handleChange} 
+    />
+    <Model 
+    active={active} 
+    handleChange={handleChange} 
+    searchKeyword={searchHandler}
+    setOpenEdit={setOpenEdit}
+    obj={setObj}
+    data={obj}
+    editModel={openEdit}
+    ed={blank}
+    setBlank={setBlank}
+    onEdit={edit}
+    />
+  </div>;
 }
